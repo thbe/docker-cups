@@ -26,14 +26,11 @@ ENV TERM xterm
 WORKDIR /opt/cups
 
 # Install CUPS and Apples zeroconf
-RUN yum -y install cups avahi avahi-tools && \
+RUN yum -y install openssl cups avahi avahi-tools && \
     yum clean all && rm -rf /var/cache/yum
 
 # Configure CUPS
-RUN sed -i 's/Listen localhost:631/Listen 0.0.0.0:631/' /etc/cups/cupsd.conf && \
-    sed -i 's/Browsing Off/Browsing On/' /etc/cups/cupsd.conf && \
-    sed -i 's/SystemGroup sys root/SystemGroup sys root cupsadm/' /etc/cups/cups-files.conf
-
+COPY ./cupsd.conf /etc/cups/cupsd.conf
 COPY ./create_admin_user.service /etc/systemd/system/create_admin_user.service
 COPY ./run.sh /opt/cups/run.sh
 RUN chmod 755 /opt/cups/run.sh
