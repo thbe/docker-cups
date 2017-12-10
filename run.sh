@@ -58,27 +58,22 @@ if printf '%s' "${CUPS_USER} ${CUPS_PASSWORD}" | LC_ALL=C grep -q '[^ -~]\+'; th
 fi
 
 ### Create CUPS admin user ###
-/sbin/useradd -m ${CUPS_USER}
+/sbin/useradd ${CUPS_USER} --system -G root,sys -M
 if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to add user ${CUPS_USER}, aborting!"; exit; fi
 echo ${CUPS_USER}:${CUPS_PASSWORD} | /usr/sbin/chpasswd
 if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to set password ${CUPS_PASSWORD} for user ${CUPS_USER}, aborting!"; exit; fi
-/usr/sbin/usermod -aG sys ${CUPS_USER}
-if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to add user ${CUPS_USER} to group sys, aborting!"; exit; fi
 
 cat <<EOF
 
-================================================
+===========================================================
 
-The CUPS instance is now ready for use!
-
-Connect to your CUPS web interface with these details:
+The dockerized CUPS instance is now ready for use! The web
+interface is available here:
 
 URL:       https://<dockerhost>:631/
 Username:  ${CUPS_USER}
 Password:  ${CUPS_PASSWORD}
 
-Write these down. You'll need them to connect!
-
-================================================
+===========================================================
 
 EOF
