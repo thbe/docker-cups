@@ -46,5 +46,5 @@ RUN apk add --no-cache cups && \
 # Expose CUPS adminstrative web interface
 EXPOSE 631/tcp
 
-# Start systemd
-# CMD ["/usr/sbin/init"]
+# Start init
+CMD ["/sbin/init"]
