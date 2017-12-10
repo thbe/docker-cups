@@ -44,24 +44,19 @@ if [ -z ${CUPS_ENV_USER} ] || [ -z ${CUPS_ENV_PASSWORD} ]; then
 fi
 
 ### Main logic to create an admin user for CUPS ###
-if [ ! -f /opt/cups/user-gen.env ]; then
-  echo CUPS_USER=${CUPS_USER} > /opt/cups/user-gen.env
-  echo CUPS_PASSWORD=${CUPS_PASSWORD} >> /opt/cups/user-gen.env
-else
-  echo "Retrieving username and password from previously stored CUPS credentials!"
-  . /opt/cups/user-gen.env
-fi
-
-### Check if CUPS_USER and CUPS_PASSWORD contain illegal characters ###
 if printf '%s' "${CUPS_USER} ${CUPS_PASSWORD}" | LC_ALL=C grep -q '[^ -~]\+'; then
-  RETURN=1; REASON="CUPS username or password contain illegal non-ASCII characters!"; exit;
+  RETURN=1; REASON="CUPS username or password contain illegal non-ASCII characters, aborting!"; exit;
 fi
 
 ### Create CUPS admin user ###
-/sbin/useradd ${CUPS_USER} --system -G root,sys -M
-if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to add user ${CUPS_USER}, aborting!"; exit; fi
-echo ${CUPS_USER}:${CUPS_PASSWORD} | /usr/sbin/chpasswd
-if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to set password ${CUPS_PASSWORD} for user ${CUPS_USER}, aborting!"; exit; fi
+if [ "$(grep -ci ${CUPS_USER} /etc/shadow)" -eq 0 ]; then
+  /sbin/useradd ${CUPS_USER} --system -G sys,lp -d /tmp -M
+  if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to add user ${CUPS_USER}, aborting!"; exit; fi
+  echo ${CUPS_USER}:${CUPS_PASSWORD} | /usr/sbin/chpasswd
+  if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to set password ${CUPS_PASSWORD} for user ${CUPS_USER}, aborting!"; exit; fi
+else
+  RETURN=1; REASON="CUPS username already exist, aborting!"; exit;
+fi
 
 cat <<EOF
 
