@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 #
 # Author:       Thomas Bendler <project@bendler-net.de>
 # Date:         Thu Dec  7 11:41:44 CET 2017
@@ -17,9 +17,9 @@
 ### Error handling ###
 error_handling() {
   if [ "${RETURN}" -eq 0 ]; then
-    echov "${SCRIPT} successfull!"
+    echo "${SCRIPT} successfull!"
   else
-    echoe "${SCRIPT} aborted, reason: ${REASON}"
+    echo "${SCRIPT} aborted, reason: ${REASON}"
   fi
   exit "${RETURN}"
 }
@@ -40,6 +40,8 @@ if [ ! -d /opt/cups ]; then RETURN=1; REASON="CUPS configuration dirctory not fo
 ### Copy CUPS docker env variable to script ###
 if [ -z ${CUPS_ENV_PASSWORD} ]; then
   CUPS_PASSWORD="pass"
+else
+  CUPS_PASSWORD=${CUPS_ENV_PASSWORD}
 fi
 
 ### Main logic to create an admin user for CUPS ###
