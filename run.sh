@@ -53,10 +53,6 @@ fi
 echo root:${CUPS_PASSWORD} | /usr/sbin/chpasswd
 if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to set password ${CUPS_PASSWORD} for user root, aborting!"; exit; fi
 
-### Configure CUPS for remote administration ###
-cupsctl --remote-any
-/etc/init.d/cupsd restart
-
 cat <<EOF
 
 ===========================================================
@@ -71,3 +67,5 @@ Password:  ${CUPS_PASSWORD}
 ===========================================================
 
 EOF
+
+/sbin/init

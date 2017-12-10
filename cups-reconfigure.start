@@ -1,0 +1,3 @@
+### Configure CUPS for remote administration ###
+cupsctl --remote-any
+/etc/init.d/cupsd restart
