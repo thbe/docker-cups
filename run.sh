@@ -68,4 +68,10 @@ Password:  ${CUPS_PASSWORD}
 
 EOF
 
+### Start CUPS instance ###
+/usr/sbin/cupsd -f -c /etc/cups/cupsd.conf
+
+### Configure CUPS for remote administration ###
+/usr/sbin/cupsctl --remote-any
+
 while true; do sleep 60; done

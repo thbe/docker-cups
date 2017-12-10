@@ -21,22 +21,12 @@ ENV TERM xterm
 # Set workdir
 WORKDIR /opt/cups
 
-# Install, configure and start CUPS
-RUN apk add --no-cache cups && \
-    apk add --no-cache openrc && \
-    rc-update add cupsd
+# Install CUPS
+RUN apk add --no-cache cups
 
-# Add local CUPS reconfiguration service
-COPY ./cups-reconfigure.start /etc/local.d/cups-reconfigure.start
-RUN chmod 755 /etc/local.d/cups-reconfigure.start
-RUN rc-update add local default
-
-# Configure CUPS
+# Prepare CUPS start script
 COPY ./run.sh /opt/cups/run.sh
 RUN chmod 755 /opt/cups/run.sh
-
-# Enable verbose
-COPY ./local /etc/conf.d/local
 
 # Expose CUPS adminstrative web interface
 EXPOSE 631/tcp
