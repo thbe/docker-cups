@@ -1,63 +1,69 @@
-#!/bin/sh
+#! /bin/bash
 #
-# Script to create an admin user for CUPS exceuted by systemd
+# Author:       Thomas Bendler <project@bendler-net.de>
+# Date:         Thu Dec  7 11:41:44 CET 2017
+#
+# Release:      0.1.0
+#
+# Prerequisite: This release needs a shell which could handle functions.
+#               If shell is not able to handle functions, remove the
+#               error section.
+#
+# Note:         For debugging reason change shebang to: /bin/bash -vx
+#
+# ChangeLog:    v0.1.0 - Initial release
 #
 
-export PATH="/usr/sbin:/usr/bin:/sbin:/bin"
-
-exit_on_error() { echo "Error: ${1}" >&2; exit 1; }
-remove_spaces() { printf '%s' "${1}" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//'; }
-remove_quotes() { printf '%s' "${1}" | sed -e 's/^"\(.*\)"$/\1/' -e "s/^'\(.*\)'$/\1/"; }
-
-if [ ! -f /.dockerenv ]; then
-  exit_on_error "This script is intend to run in a Docker container only!"
-fi
-
-if [ ! -d /opt/cups ]; then
-  exit_on_error "Configuration directory does not exist!"
-fi
-
-. /opt/cups/user.env
-
-if [ -z ${CUPS_USER} ] && [ -z ${CUPS_PASSWORD} ]; then
-  if [ -f /opt/cups/user-gen.env ]; then
-    echo
-    echo "Retrieving previously generated CUPS credentials..."
-    . /opt/cups/user-gen.env
+### Error handling ###
+error_handling() {
+  if [ "${RETURN}" -eq 0 ]; then
+    echov "${SCRIPT} successfull!"
   else
-    echo
-    echo "CUPS credentials not set by user. Generating random password..."
-    CUPS_USER=cupsadm
-    CUPS_PASSWORD="$(LC_CTYPE=C tr -dc 'A-HJ-NPR-Za-km-z2-9' < /dev/urandom | head -c 16)"
-    echo CUPS_USER=${CUPS_USER} > /opt/cups/user-gen.env
-    echo CUPS_PASSWORD=${CUPS_PASSWORD} >> /opt/cups/user-gen.env
+    echoe "${SCRIPT} aborted, reason: ${REASON}"
   fi
+  exit "${RETURN}"
+}
+trap "error_handling" EXIT HUP INT QUIT TERM
+RETURN=0
+REASON="Finished!"
+
+### Default values ###
+export PATH=/usr/sbin:/usr/bin:/sbin:/bin
+export LC_ALL=C
+export LANG=C
+SCRIPT=$(basename ${0})
+
+### Check prerequisite ###
+if [ ! -f /.dockerenv ]; then RETURN=1; REASON="Not executed inside a Docker container, aborting!"; exit; fi
+if [ ! -d /opt/cups ]; then RETURN=1; REASON="CUPS configuration dirctory not found, aborting!"; exit; fi
+
+### Copy CUPS docker env variable to script ###
+if [ -z ${CUPS_ENV_USER} ] || [ -z ${CUPS_ENV_PASSWORD} ]; then
+  CUPS_USER="cupsadm"
+  CUPS_PASSWORD="pass"
 fi
 
-# Remove whitespace and quotes around CUPS variables, if any
-CUPS_USER=$(remove_spaces ${CUPS_USER})
-CUPS_USER=$(remove_quotes ${CUPS_USER})
-CUPS_PASSWORD=$(remove_spaces ${CUPS_PASSWORD})
-CUPS_PASSWORD=$(remove_quotes ${CUPS_PASSWORD})
-
-if [ -z ${CUPS_USER} ] || [ -z ${CUPS_PASSWORD} ]; then
-  exiterr "All CUPS variables must be specified. Edit your 'env' file and re-enter them."
+### Main logic to create an admin user for CUPS ###
+if [ ! -f /opt/cups/user-gen.env ]; then
+  echo CUPS_USER=${CUPS_USER} > /opt/cups/user-gen.env
+  echo CUPS_PASSWORD=${CUPS_PASSWORD} >> /opt/cups/user-gen.env
+else
+  echo "Retrieving username and password from previously stored CUPS credentials!"
+  . /opt/cups/user-gen.env
 fi
 
+### Check if CUPS_USER and CUPS_PASSWORD contain illegal characters ###
 if printf '%s' "${CUPS_USER} ${CUPS_PASSWORD}" | LC_ALL=C grep -q '[^ -~]\+'; then
-  exiterr "CUPS credentials must not contain non-ASCII characters."
+  RETURN=1; REASON="CUPS username or password contain illegal non-ASCII characters!"; exit;
 fi
 
-if [ ${CUPS_USER} != cupsadm ]; then
-  /usr/sbin/groupadd cupdadm
-fi
+### Create CUPS admin user ###
 /sbin/useradd -m ${CUPS_USER}
-[ $? -eq 0 ] && echo "User ${CUPS_USER} has been added to system!" \
-             || echo "Failed to add user ${CUPS_USER}!"
+if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to add user ${CUPS_USER}, aborting!"; exit; fi
 echo ${CUPS_USER}:${CUPS_PASSWORD} | /usr/sbin/chpasswd
-[ $? -eq 0 ] && echo "Password ${CUPS_PASSWORD} has been set for ${CUPS_USER}!" \
-             || echo "Failed to set password ${CUPS_PASSWORD} for user $CUPS_USER!"
-/usr/sbin/usermod -aG cupsadm ${CUPS_USER}
+if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to set password ${CUPS_PASSWORD} for user ${CUPS_USER}, aborting!"; exit; fi
+/usr/sbin/usermod -aG sys ${CUPS_USER}
+if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to add user ${CUPS_USER} to group sys, aborting!"; exit; fi
 
 cat <<EOF
 
@@ -76,5 +82,3 @@ Write these down. You'll need them to connect!
 ================================================
 
 EOF
-
-exit 0
