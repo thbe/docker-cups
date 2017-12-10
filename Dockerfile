@@ -25,7 +25,7 @@ WORKDIR /opt/cups
 
 # Install, configure and start CUPS
 RUN apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress openrc cupsd && \
+    apk --no-cache --no-progress add openrc cupsd && \
     touch /run/openrc/softlevel && \
     rc-update add cupsd && \
     /etc/init.d/cupsd start && \
