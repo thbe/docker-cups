@@ -24,7 +24,10 @@ WORKDIR /opt/cups
 # Install CUPS
 RUN apk add --no-cache cups
 
-# Prepare CUPS start script
+# Configure CUPS
+COPY ./cupsd.conf /etc/cups/cupsd.conf
+
+# Prepare CUPS start
 COPY ./run.sh /opt/cups/run.sh
 RUN chmod 755 /opt/cups/run.sh
 
