@@ -26,8 +26,8 @@ WORKDIR /opt/cups
 # Install, configure and start CUPS
 RUN apk add --no-cache cups && \
     apk add --no-cache openrc && \
-    touch /run/openrc/softlevel && \
     rc-update add cupsd && \
+    touch /run/openrc/softlevel && \
     /etc/init.d/cupsd start && \
     cupsctl --remote-admin
 
