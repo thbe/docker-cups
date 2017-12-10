@@ -37,6 +37,10 @@ SCRIPT=$(basename ${0})
 if [ ! -f /.dockerenv ]; then RETURN=1; REASON="Not executed inside a Docker container, aborting!"; exit; fi
 if [ ! -d /opt/cups ]; then RETURN=1; REASON="CUPS configuration dirctory not found, aborting!"; exit; fi
 
+### Configure CUPS for remote administration ###
+cupsctl --remote-any
+/etc/init.d/cupsd restart
+
 ### Copy CUPS docker env variable to script ###
 if [ -z ${CUPS_ENV_PASSWORD} ]; then
   CUPS_PASSWORD="pass"
@@ -67,5 +71,3 @@ Password:  ${CUPS_PASSWORD}
 ===========================================================
 
 EOF
-
-/sbin/init
