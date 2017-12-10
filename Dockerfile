@@ -32,8 +32,8 @@ RUN chmod 755 /etc/local.d/cups-reconfigure.start
 RUN rc-update add local default
 
 # Configure CUPS
-COPY ./configure.sh /opt/cups/configure.sh
-RUN chmod 755 /opt/cups/configure.sh
+COPY ./configure.sh /opt/cups/run.sh
+RUN chmod 755 /opt/cups/run.sh
 
 # Enable verbose
 COPY ./local /etc/conf.d/local
@@ -41,8 +41,5 @@ COPY ./local /etc/conf.d/local
 # Expose CUPS adminstrative web interface
 EXPOSE 631/tcp
 
-# Reconfigure CUPS
-ENTRYPOINT ["/opt/cups/configure.sh"]
-
-# Start CUPS instance
-CMD ["/sbin/init"]
+# Reconfigure and start CUPS instance
+CMD ["/opt/cups/run.sh"]

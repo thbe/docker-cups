@@ -67,3 +67,5 @@ Password:  ${CUPS_PASSWORD}
 ===========================================================
 
 EOF
+
+while true; do sleep 60; done
