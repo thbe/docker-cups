@@ -24,9 +24,8 @@ ENV TERM xterm
 WORKDIR /opt/cups
 
 # Install, configure and start CUPS
-RUN apk update && \
-    apk --no-cache --no-progress upgrade && \
-    apk --no-cache --no-progress add openrc cupsd && \
+RUN apk add --no-cache cups && \
+    apk add --no-cache openrc && \
     touch /run/openrc/softlevel && \
     rc-update add cupsd && \
     /etc/init.d/cupsd start && \
