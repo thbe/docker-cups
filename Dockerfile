@@ -37,6 +37,9 @@ RUN rc-update add local default
 COPY ./configure.sh /opt/cups/configure.sh
 RUN chmod 755 /opt/cups/configure.sh
 
+# Enable verbose
+COPY ./local /etc/conf.d/local
+
 # Expose CUPS adminstrative web interface
 EXPOSE 631/tcp
 
