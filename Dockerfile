@@ -5,9 +5,8 @@ FROM centos/systemd
 #   docker build --rm --no-cache -t thbe/cups .
 #
 # USAGE:
-#   docker run --detach --restart always --cap-add=SYS_ADMIN -e "container=docker" \
-#              --name cups --hostname cups.fritz.box \
-#              -P -v /sys/fs/cgroup:/sys/fs/cgroup:ro thbe/cups
+#   wget https://raw.githubusercontent.com/thbe/docker-cups/master/start_cups.sh
+#   ./start_cups.sh
 #
 # DEBUG:
 #   yum -y install vim-common vim-enhanced curl wget net-tools gpm-libs perl-libs tar
