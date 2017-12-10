@@ -32,7 +32,7 @@ RUN chmod 755 /etc/local.d/cups-reconfigure.start
 RUN rc-update add local default
 
 # Configure CUPS
-COPY ./configure.sh /opt/cups/run.sh
+COPY ./run.sh /opt/cups/run.sh
 RUN chmod 755 /opt/cups/run.sh
 
 # Enable verbose
