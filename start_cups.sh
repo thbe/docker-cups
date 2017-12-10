@@ -3,7 +3,6 @@
 # Start docker image that provides a CUPS instance
 #
 
-CUPS_USER=cupsadm
 CUPS_PASSWORD=pass
 
 docker run --detach --restart always \
