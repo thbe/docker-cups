@@ -14,8 +14,7 @@ FROM centos/systemd
 # Set metadata
 LABEL maintainer="Thomas Bendler <project@bendler-net.de>"
 LABEL version="1.0"
-LABEL description="Creates CentOS Linux 7 docker base image to provide \
-an airplay capable CUPS instance"
+LABEL description="Creates CentOS Linux 7 docker base image to provide a CUPS instance"
 
 # Set environment
 ENV LANG en_US.UTF-8
@@ -24,8 +23,8 @@ ENV TERM xterm
 # Set workdir
 WORKDIR /opt/cups
 
-# Install CUPS and Apples zeroconf
-RUN yum -y install openssl cups avahi avahi-tools && \
+# Install CUPS
+RUN yum -y install openssl cups && \
     yum clean all && rm -rf /var/cache/yum
 
 # Configure CUPS
@@ -37,12 +36,9 @@ RUN chmod 755 /opt/cups/run.sh
 # Start CUPS
 RUN systemctl enable create_admin_user
 RUN systemctl enable cups
-RUN systemctl enable avahi-daemon
 
-# Expose zeroconf adminstrative web interface
+# Expose CUPS adminstrative web interface
 EXPOSE 631/tcp
-EXPOSE 535/udp
-EXPOSE 56187/udp
 
 # Start systemd
 CMD ["/usr/sbin/init"]
