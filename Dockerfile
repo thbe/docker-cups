@@ -36,4 +36,4 @@ RUN chmod 755 /opt/cups/run.sh
 EXPOSE 631/tcp
 
 # Start init
-CMD ["/opt/cups/run.sh", "/sbin/init"]
+CMD ["/sbin/init"]
