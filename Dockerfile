@@ -26,13 +26,14 @@ WORKDIR /opt/cups
 # Install, configure and start CUPS
 RUN apk add --no-cache cups && \
     apk add --no-cache openrc && \
-    rc-update add cupsd && \
-    touch /run/openrc/softlevel && \
-    /etc/init.d/cupsd start && \
-    cupsctl --remote-admin
+    rc-update add cupsd
+
+# RUN touch /run/openrc/softlevel && \
+#     /etc/init.d/cupsd start && \
+#     cupsctl --remote-admin
 
 # Set initial root password
-RUN echo root:pass | chpasswd
+# RUN echo root:pass | chpasswd
 
 # Configure CUPS
 # COPY ./run.sh /opt/cups/run.sh
