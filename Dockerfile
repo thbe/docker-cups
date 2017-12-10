@@ -30,7 +30,7 @@ RUN apk add --no-cache cups && \
 
 # Add local CUPS reconfiguration service
 RUN mkdir /etc/local.d
-COPY ./cups-reconfigure.start /etc/local.d
+COPY ./cups-reconfigure.start /etc/local.d/cups-reconfigure.start
 RUN chmod 755 /etc/local.d/cups-reconfigure.start
 RUN rc-update add local default
 
