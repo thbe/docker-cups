@@ -1,5 +1,5 @@
 FROM alpine
-
+#
 # BUILD:
 #   wget https://raw.githubusercontent.com/thbe/docker-cups/master/Dockerfile
 #   docker build --rm --no-cache -t thbe/cups .
@@ -8,8 +8,6 @@ FROM alpine
 #   wget https://raw.githubusercontent.com/thbe/docker-cups/master/start_cups.sh
 #   ./start_cups.sh
 #
-# DEBUG:
-#   yum -y install vim-common vim-enhanced curl wget net-tools gpm-libs perl-libs tar
 
 # Set metadata
 LABEL maintainer="Thomas Bendler <project@bendler-net.de>"
@@ -42,6 +40,9 @@ COPY ./local /etc/conf.d/local
 
 # Expose CUPS adminstrative web interface
 EXPOSE 631/tcp
+
+# Reconfigure CUPS
+ENTRYPOINT ["/opt/cups/configure.sh"]
 
 # Start CUPS instance
 CMD ["/sbin/init"]
