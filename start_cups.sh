@@ -9,7 +9,7 @@ CUPS_PASSWORD=pass
 docker run --detach --restart always \
   --cap-add=SYS_ADMIN \
   -e "container=docker" \
-  -e CUPS_ENV_USER="${CUPS_USER}" \
+  -e CUPS_ENV_HOST="$(hostname)" \
   -e CUPS_ENV_PASSWORD="${CUPS_PASSWORD}" \
   --name cups --hostname cups.fritz.box \
   -p 631:631/tcp \

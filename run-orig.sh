@@ -38,22 +38,25 @@ if [ ! -f /.dockerenv ]; then RETURN=1; REASON="Not executed inside a Docker con
 if [ ! -d /opt/cups ]; then RETURN=1; REASON="CUPS configuration dirctory not found, aborting!"; exit; fi
 
 ### Copy CUPS docker env variable to script ###
-if [ -z ${CUPS_ENV_PASSWORD} ]; then
+if [ -z ${CUPS_ENV_USER} ] || [ -z ${CUPS_ENV_PASSWORD} ]; then
+  CUPS_USER="cupsadm"
   CUPS_PASSWORD="pass"
 fi
 
 ### Main logic to create an admin user for CUPS ###
-if printf '%s' "${CUPS_PASSWORD}" | LC_ALL=C grep -q '[^ -~]\+'; then
-  RETURN=1; REASON="CUPS password contain illegal non-ASCII characters, aborting!"; exit;
+if printf '%s' "${CUPS_USER} ${CUPS_PASSWORD}" | LC_ALL=C grep -q '[^ -~]\+'; then
+  RETURN=1; REASON="CUPS username or password contain illegal non-ASCII characters, aborting!"; exit;
 fi
 
-### set password for root user ###
-echo root:${CUPS_PASSWORD} | /usr/sbin/chpasswd
-if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to set password ${CUPS_PASSWORD} for user root, aborting!"; exit; fi
-
-### Configure CUPS for remote administration ###
-cupsctl --remote-any
-/etc/init.d/cupsd restart
+### Create CUPS admin user ###
+if [ "$(grep -ci ${CUPS_USER} /etc/shadow)" -eq 0 ]; then
+  /sbin/useradd ${CUPS_USER} --system -G sys,lp -d /tmp -M
+  if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to add user ${CUPS_USER}, aborting!"; exit; fi
+  echo ${CUPS_USER}:${CUPS_PASSWORD} | /usr/sbin/chpasswd
+  if [ ${?} -ne 0 ]; then RETURN=${?}; REASON="Failed to set password ${CUPS_PASSWORD} for user ${CUPS_USER}, aborting!"; exit; fi
+else
+  RETURN=1; REASON="CUPS username already exist, aborting!"; exit;
+fi
 
 cat <<EOF
 
@@ -62,8 +65,8 @@ cat <<EOF
 The dockerized CUPS instance is now ready for use! The web
 interface is available here:
 
-URL:       https://${CUPS_ENV_HOST}:631/
-Username:  root
+URL:       https://<dockerhost>:631/
+Username:  ${CUPS_USER}
 Password:  ${CUPS_PASSWORD}
 
 ===========================================================

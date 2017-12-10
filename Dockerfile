@@ -28,23 +28,12 @@ RUN apk add --no-cache cups && \
     apk add --no-cache openrc && \
     rc-update add cupsd
 
-# RUN touch /run/openrc/softlevel && \
-#     /etc/init.d/cupsd start && \
-#     cupsctl --remote-admin
-
-# Set initial root password
-# RUN echo root:pass | chpasswd
-
 # Configure CUPS
-# COPY ./run.sh /opt/cups/run.sh
-# RUN chmod 755 /opt/cups/run.sh
-
-# Start CUPS
-# RUN systemctl enable create_admin_user
-# RUN systemctl enable cups
+COPY ./run.sh /opt/cups/run.sh
+RUN chmod 755 /opt/cups/run.sh
 
 # Expose CUPS adminstrative web interface
 EXPOSE 631/tcp
 
 # Start init
-CMD ["/sbin/init"]
+CMD ["/opt/cups/run.sh", "/sbin/init"]
