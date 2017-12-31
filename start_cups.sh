@@ -12,6 +12,7 @@ docker run --detach --restart always \
   -e CUPS_ENV_PASSWORD="${CUPS_PASSWORD}" \
   --name cups --hostname cups.fritz.box \
   -p 631:631/tcp \
+  -p 5353:5353/udp \
   -v /sys/fs/cgroup:/sys/fs/cgroup:ro \
   -v "$(pwd)"/user.env:/opt/cups/user.env:ro \
   thbe/cups

@@ -74,4 +74,7 @@ EOF
 ### Configure CUPS for remote administration ###
 /usr/sbin/cupsctl --remote-any
 
+### Start AVAHI instance ###
+/usr/sbin/avahi-daemon -D
+
 while true; do sleep 60; done
