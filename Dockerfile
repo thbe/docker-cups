@@ -11,7 +11,7 @@ FROM alpine
 
 # Set metadata
 LABEL maintainer="Thomas Bendler <project@bendler-net.de>"
-LABEL version="1.0"
+LABEL version="1.1"
 LABEL description="Creates an Alpine container serving a CUPS/AVAHI instance"
 
 # Set environment
