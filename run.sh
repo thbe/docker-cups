@@ -1,18 +1,22 @@
 #! /bin/sh
 #
 # Author:       Thomas Bendler <project@bendler-net.de>
-# Date:         Thu Dec  7 11:41:44 CET 2017
+# Date:         Fri Feb 16 19:42:55 CET 2018
 #
-# Release:      0.1.0
+# Release:      0.1.1
 #
 # Prerequisite: This release needs a shell which could handle functions.
 #               If shell is not able to handle functions, remove the
 #               error section.
 #
-# Note:         For debugging reason change shebang to: /bin/bash -vx
-#
 # ChangeLog:    v0.1.0 - Initial release
+#               v0.1.1 - Add debug switch
 #
+
+### Enable debug if debug flag is true ###
+if [ -z "${CUPS_ENV_DEBUG}" ];then
+  set -x
+fi
 
 ### Error handling ###
 error_handling() {
@@ -23,7 +27,7 @@ error_handling() {
   fi
   exit "${RETURN}"
 }
-trap "error_handling" EXIT HUP INT QUIT TERM
+trap "error_handling" ERR EXIT HUP INT QUIT TERM
 RETURN=0
 REASON="Finished!"
 
