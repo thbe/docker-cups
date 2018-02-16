@@ -14,7 +14,7 @@
 #
 
 ### Enable debug if debug flag is true ###
-if [ -z "${CUPS_ENV_DEBUG}" ];then
+if [ -n "${CUPS_ENV_DEBUG}" ]; then
   set -ex
 fi
 
