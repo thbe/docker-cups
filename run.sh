@@ -73,12 +73,12 @@ Password:  ${CUPS_PASSWORD}
 EOF
 
 ### Configure AVAHI instance ###
-/bin/sed -i 's/#host-name=local/host-name='$(hostname -s)'/g' /etc/avahi/avahi-daemon.conf
+/bin/sed -i 's/#host-name=foo/host-name='$(hostname -s)'/g' /etc/avahi/avahi-daemon.conf
 /bin/sed -i 's/#domain-name=local/domain-name='$(hostname -d)'/g' /etc/avahi/avahi-daemon.conf
 /bin/sed -i 's/#enable-dbus=yes/enable-dbus=no/g' /etc/avahi/avahi-daemon.conf
 
 ### Start AVAHI instance ###
-/usr/sbin/avahi-daemon -D
+#/usr/sbin/avahi-daemon -D
 
 ### Start CUPS instance ###
 /usr/sbin/cupsd -f -c /etc/cups/cupsd.conf

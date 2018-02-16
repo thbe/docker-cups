@@ -22,8 +22,8 @@ ENV TERM xterm
 WORKDIR /opt/cups
 
 # Install CUPS/AVAHI
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ cups cups-filters cups-pdf
-RUN apk add --no-cache avahi avahi-tools
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ cups cups-filters cups-pdf \
+    apk add --no-cache avahi avahi-tools
 
 # Configure CUPS
 COPY ./cupsd.conf /etc/cups/cupsd.conf
@@ -35,11 +35,11 @@ COPY ppd /etc/cups/ppd
 COPY ./run.sh /opt/cups/run.sh
 RUN chmod 755 /opt/cups/run.sh
 
-# Expose CUPS adminstrative web interface
-EXPOSE 631/tcp
+# Expose SMB printer sharing
+EXPOSE 137/udp 139/tcp 445/tcp
 
-# Expose AVAHI daemon
-EXPOSE 5353/udp
+# Expose IPP printer sharing
+EXPOSE 631/tcp 5353/udp
 
 # Reconfigure and start CUPS instance
 CMD ["/opt/cups/run.sh"]
