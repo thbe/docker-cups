@@ -22,8 +22,9 @@ ENV TERM xterm
 WORKDIR /opt/cups
 
 # Install CUPS/AVAHI
-RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ cups cups-filters cups-pdf && \
-    apk add --no-cache avahi avahi-tools
+RUN apk add --no-cache cups cups-filters
+# RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ cups cups-filters cups-pdf
+# RUN apk add --no-cache avahi avahi-tools
 
 # Configure CUPS
 COPY ./cupsd.conf /etc/cups/cupsd.conf

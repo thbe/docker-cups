@@ -3,7 +3,7 @@
 # Start docker image that provides a CUPS instance
 #
 
-CUPS_PASSWORD=pass
+CUPS_PASSWORD=password
 
 docker run --detach --restart always \
   --cap-add=SYS_ADMIN \
