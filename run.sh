@@ -27,7 +27,7 @@ error_handling() {
   fi
   exit "${RETURN}"
 }
-trap "error_handling" ERR EXIT HUP INT QUIT TERM
+trap "error_handling" EXIT HUP INT QUIT TERM
 RETURN=0
 REASON="Finished!"
 
