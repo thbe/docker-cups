@@ -10,6 +10,7 @@ docker run --detach --restart always \
   -e "container=docker" \
   -e CUPS_ENV_HOST="$(hostname)" \
   -e CUPS_ENV_PASSWORD="${CUPS_PASSWORD}" \
+  -e CUPS_ENV_DEBUG="${CUPS_DEBUG}" \
   --name cups --hostname cups.fritz.box \
   -p 631:631/tcp \
   -p 5353:5353/udp \
