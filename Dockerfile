@@ -22,7 +22,7 @@ ENV TERM xterm
 WORKDIR /opt/cups
 
 # Install CUPS/AVAHI
-RUN apk add --no-cache cups cups-filters cups-pdf avahi avahi-tools
+RUN apk add --no-cache cups cups-filters avahi avahi-tools
 
 # Configure CUPS
 COPY ./cupsd.conf /etc/cups/cupsd.conf
