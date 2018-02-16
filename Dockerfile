@@ -23,6 +23,7 @@ WORKDIR /opt/cups
 
 # Install CUPS/AVAHI
 RUN apk add --no-cache cups cups-filters avahi avahi-tools
+RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ cups-pdf
 
 # Configure CUPS
 COPY ./cupsd.conf /etc/cups/cupsd.conf
