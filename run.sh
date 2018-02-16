@@ -72,10 +72,8 @@ Password:  ${CUPS_PASSWORD}
 
 EOF
 
-### Start CUPS instance ###
-/usr/sbin/cupsd -F -c /etc/cups/cupsd.conf
-
 ### Start AVAHI instance ###
 /usr/sbin/avahi-daemon -D
 
-while true; do sleep 60; done
+### Start CUPS instance ###
+/usr/sbin/cupsd -f -c /etc/cups/cupsd.conf
