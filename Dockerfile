@@ -22,10 +22,13 @@ ENV TERM xterm
 WORKDIR /opt/cups
 
 # Install CUPS/AVAHI
-RUN apk add --no-cache cups avahi avahi-tools
+RUN apk add --no-cache cups cups-filters cups-pdf avahi avahi-tools
 
 # Configure CUPS
 COPY ./cupsd.conf /etc/cups/cupsd.conf
+
+# Install PPDs
+COPY ppd /etc/cups/ppd
 
 # Configure AVAHI
 RUN sed -i 's/#enable-dbus=yes/enable-dbus=no/g' /etc/avahi/avahi-daemon.conf
