@@ -1,16 +1,18 @@
 #! /bin/sh
 #
-# Author:       Thomas Bendler <project@bendler-net.de>
-# Date:         Fri Feb 16 19:42:55 CET 2018
+# Set root password and start CUPS instance
 #
-# Release:      0.1.1
+# Author:       Thomas Bendler <project@bendler-net.de>
+# Date:         Sat Feb 17 10:54:34 CET 2018
+#
+# Release:      v1.2
 #
 # Prerequisite: This release needs a shell which could handle functions.
 #               If shell is not able to handle functions, remove the
 #               error section.
 #
-# ChangeLog:    v0.1.0 - Initial release
-#               v0.1.1 - Add debug switch
+# ChangeLog:    v0.1 - Initial release
+#               v1.2 - First production ready release (align with image version)
 #
 
 ### Enable debug if debug flag is true ###
@@ -71,14 +73,6 @@ Password:  ${CUPS_PASSWORD}
 ===========================================================
 
 EOF
-
-### Configure AVAHI instance ###
-/bin/sed -i 's/#host-name=foo/host-name='$(hostname -s)'/g' /etc/avahi/avahi-daemon.conf
-/bin/sed -i 's/#domain-name=local/domain-name='$(hostname -d)'/g' /etc/avahi/avahi-daemon.conf
-/bin/sed -i 's/#enable-dbus=yes/enable-dbus=no/g' /etc/avahi/avahi-daemon.conf
-
-### Start AVAHI instance ###
-#/usr/sbin/avahi-daemon -D
 
 ### Start CUPS instance ###
 /usr/sbin/cupsd -f -c /etc/cups/cupsd.conf

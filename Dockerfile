@@ -11,8 +11,8 @@ FROM alpine
 
 # Set metadata
 LABEL maintainer="Thomas Bendler <project@bendler-net.de>"
-LABEL version="1.1"
-LABEL description="Creates an Alpine container serving a CUPS/AVAHI instance"
+LABEL version="1.2"
+LABEL description="Creates an Alpine container serving a CUPS instance with built in airplay"
 
 # Set environment
 ENV LANG en_US.UTF-8
@@ -23,14 +23,12 @@ WORKDIR /opt/cups
 
 # Install CUPS/AVAHI
 RUN apk add --no-cache cups cups-filters
-# RUN apk add --no-cache --repository http://dl-cdn.alpinelinux.org/alpine/edge/testing/ cups cups-filters cups-pdf
-# RUN apk add --no-cache avahi avahi-tools
 
 # Configure CUPS
 COPY ./cupsd.conf /etc/cups/cupsd.conf
 
 # Install PPDs
-COPY ppd /etc/cups/ppd
+# COPY ppd /etc/cups/ppd
 
 # Prepare CUPS start
 COPY ./run.sh /opt/cups/run.sh
