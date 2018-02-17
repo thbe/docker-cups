@@ -1,6 +1,9 @@
 # CUPS on Docker
 
-[![Build Status](https://travis-ci.org/thbe/docker-cups.svg?branch=master)](https://travis-ci.org/thbe/docker-cups) [![GitHub Stars](https://img.shields.io/github/stars/thbe/docker-cups.svg?maxAge=86400)](https://github.com/thbe/docker-cups/stargazers) [![Docker Stars](https://img.shields.io/docker/stars/thbe/cups.svg?maxAge=86400)](https://hub.docker.com/r/thbe/cups) [![Docker Pulls](https://img.shields.io/docker/pulls/thbe/cups.svg?maxAge=86400)](https://hub.docker.com/r/thbe/cups)
+[![Build Status](https://img.shields.io/docker/automated/thbe/cups.svg)](https://hub.docker.com/r/thbe/cups/builds/)
+[![GitHub Stars](https://img.shields.io/github/stars/thbe/docker-cups.svg)](https://github.com/thbe/docker-cups/stargazers)
+[![Docker Stars](https://img.shields.io/docker/stars/thbe/cups.svg)](https://hub.docker.com/r/thbe/cups)
+[![Docker Pulls](https://img.shields.io/docker/pulls/thbe/cups.svg)](https://hub.docker.com/r/thbe/cups)
 
 This is a Docker image to run a CUPS instance with built in Apples zeroconf support.
 
