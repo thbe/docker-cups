@@ -55,6 +55,7 @@ from GitHub:
 ```
 wget https://raw.githubusercontent.com/thbe/docker-cups/master/start_cups.sh
 export CUPS_PASSWORD='SeCre!1'
+chmod 755 start_cups.sh
 ./start_cups.sh
 ```
 

@@ -24,15 +24,11 @@ WORKDIR /opt/cups
 # Install CUPS/AVAHI
 RUN apk add --no-cache cups cups-filters
 
-# Configure CUPS
-COPY ./cupsd.conf /etc/cups/cupsd.conf
-
-# Install PPDs
-# COPY ppd /etc/cups/ppd
+# Copy configuration files
+COPY root /
 
 # Prepare CUPS start
-COPY ./run.sh /opt/cups/run.sh
-RUN chmod 755 /opt/cups/run.sh
+RUN chmod 755 /srv/run.sh
 
 # Expose SMB printer sharing
 EXPOSE 137/udp 139/tcp 445/tcp
@@ -40,5 +36,5 @@ EXPOSE 137/udp 139/tcp 445/tcp
 # Expose IPP printer sharing
 EXPOSE 631/tcp 5353/udp
 
-# Reconfigure and start CUPS instance
-CMD ["/opt/cups/run.sh"]
+# Start CUPS instance
+CMD ["/srv/run.sh"]
