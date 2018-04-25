@@ -22,7 +22,7 @@ ENV TERM xterm
 WORKDIR /opt/cups
 
 # Install CUPS/AVAHI
-RUN apk add --no-cache cups cups-filters
+RUN apk update --no-cache && apk add --no-cache cups cups-filters
 
 # Copy configuration files
 COPY root /
