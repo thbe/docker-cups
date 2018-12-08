@@ -28,8 +28,7 @@ RUN apk update --no-cache && apk add --no-cache cups cups-filters avahi inotify-
 COPY root /
 
 # Prepare CUPS container
-RUN chmod 755 /srv/run.sh && \
-    sed -i 's/.*enable\-dbus=.*/enable\-dbus\=no/' /etc/avahi/avahi-daemon.conf
+RUN chmod 755 /srv/run.sh
 
 # Expose SMB printer sharing
 EXPOSE 137/udp 139/tcp 445/tcp

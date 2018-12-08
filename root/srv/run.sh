@@ -84,7 +84,7 @@ EOF
 /sbin/syslogd
 
 ### Start automatic printer refresh for avahi ###
-/srv/avahi-refresh.sh
+#/srv/avahi-refresh.sh
 
 ### Start avahi instance ###
 /usr/sbin/avahi-daemon --daemonize --syslog
