@@ -3,9 +3,9 @@
 # Set root password and start CUPS instance
 #
 # Author:       Thomas Bendler <project@bendler-net.de>
-# Date:         Sat Feb 17 10:54:34 CET 2018
+# Date:         Sat Dec  8 15:46:29 CET 2018
 #
-# Release:      v1.2
+# Release:      v1.3
 #
 # Prerequisite: This release needs a shell which could handle functions.
 #               If shell is not able to handle functions, remove the
@@ -13,6 +13,7 @@
 #
 # ChangeLog:    v0.1 - Initial release
 #               v1.2 - First production ready release (align with image version)
+#               v1.3 - Add avahi
 #
 
 ### Enable debug if debug flag is true ###
@@ -42,6 +43,11 @@ SCRIPT=$(basename ${0})
 ### Check prerequisite ###
 if [ ! -f /.dockerenv ]; then RETURN=1; REASON="Not executed inside a Docker container, aborting!"; exit; fi
 if [ ! -d /opt/cups ]; then RETURN=1; REASON="CUPS configuration dirctory not found, aborting!"; exit; fi
+
+### Prepare avahi-daemon configuration ###
+sed -i 's/.*enable\-dbus=.*/enable\-dbus\=no/' /etc/avahi/avahi-daemon.conf
+sed -i 's/.*enable\-reflector=.*/enable\-reflector\=yes/' /etc/avahi/avahi-daemon.conf
+sed -i 's/.*reflect\-ipv=.*/reflect\-ipv\=yes/' /etc/avahi/avahi-daemon.conf
 
 ### Copy CUPS docker env variable to script ###
 if [ -z ${CUPS_ENV_PASSWORD} ]; then
@@ -73,6 +79,15 @@ Password:  ${CUPS_PASSWORD}
 ===========================================================
 
 EOF
+
+### Start syslogd ###
+/sbin/syslogd
+
+### Start automatic printer refresh for avahi ###
+/srv/avahi-refresh.sh
+
+### Start avahi instance ###
+/usr/sbin/avahi-daemon --daemonize --syslog
 
 ### Start CUPS instance ###
 /usr/sbin/cupsd -f -c /etc/cups/cupsd.conf

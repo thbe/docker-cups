@@ -106,6 +106,16 @@ If you need a shell inside the container you can run the following command:
 docker exec -ti cups /bin/sh
 ```
 
+### Add network tools ###
+
+If you need network tools to debug your installation use the following command:
+
+```
+docker exec -ti cups /bin/sh
+apk update
+apk add iputils iproute2
+```
+
 ## Technical details
 
 - Alpine base image

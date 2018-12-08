@@ -3,12 +3,13 @@
 # Start docker image that provides a CUPS instance
 #
 # Author:       Thomas Bendler <project@bendler-net.de>
-# Date:         Sat Feb 17 10:54:34 CET 2018
+# Date:         Sat Dec  8 15:46:29 CET 2018
 #
-# Release:      v1.2
+# Release:      v1.3
 #
 # ChangeLog:    v0.1 - Initial release
 #               v1.2 - First production ready release (align with image version)
+#               v1.3 - Add avahi
 #
 
 ### Set standard password if not set with local environment variable ###
