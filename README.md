@@ -73,7 +73,7 @@ The next release of this Docker image should have a persistent CUPS configuratio
 
 ## Important notes
 
-The username for the print server is `root`/`password` unless you don't change the password with the environment
+The username for the print server is `root`/`pass` unless you don't change the password with the environment
 variable as described in the [Environment variables](https://github.com/thbe/docker-cups#how-to-use-this-image)
 section.
 
