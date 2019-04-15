@@ -51,7 +51,7 @@ sed -i 's/.*reflect\-ipv=.*/reflect\-ipv\=yes/' /etc/avahi/avahi-daemon.conf
 
 ### Copy CUPS docker env variable to script ###
 if [ -z ${CUPS_ENV_PASSWORD} ]; then
-  CUPS_PASSWORD="pass"
+  CUPS_PASSWORD="password"
 else
   CUPS_PASSWORD=${CUPS_ENV_PASSWORD}
 fi
