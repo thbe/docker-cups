@@ -5,7 +5,7 @@
 # USAGE:
 #   ./start_cups.sh
 #
-FROM alpine:3.21
+FROM alpine:3.24
 
 # Set metadata
 LABEL maintainer="Thomas Bendler <project@bendler-net.de>" \
